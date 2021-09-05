@@ -14,20 +14,33 @@ import {
 import {Avatar} from 'react-native-elements';
 import {Filter} from '../../components';
 
-export function CharactersPage() {
+const FILTER_OPTIONS = {
+  gender: [
+    {label: 'All', value: 'all'},
+    {label: 'Female', value: 'female'},
+    {label: 'Male', value: 'male'},
+    {label: 'Genderless', value: 'genderless'},
+    {label: 'Unknown', value: 'unknown'},
+  ],
+  species: [
+    {label: 'All', value: 'all'},
+    {label: 'Human', value: 'human'},
+    {label: 'Alien', value: 'alien'}
+  ],
+  status: [
+    {label: 'All', value: 'all'},
+    {label: 'Alive', value: 'alive'},
+    {label: 'Dead', value: 'dead'},
+    {label: 'Unknown', value: 'unknown'},
+  ],
+};
+
+const useCharacters = filter => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDataOver, setIsDataOver] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [characters, setCharacters] = useState([]);
-  const [isCharacterModalOpened, setIsCharacterModalOpened] = useState(false);
-
-  const [character, setCharacter] = useState([]);
-
-  const [filter, setFilter] = useState({
-    gender: 'all',
-    species: 'all',
-    status: 'all',
-  });
 
   const buildFilterQueryParams = filterObject =>
     Object.entries(filterObject)
@@ -35,7 +48,6 @@ export function CharactersPage() {
       .map(([key, value]) => `${key}=${value}`)
       .join('&');
 
-  //fetching characters with current query params
   const fetchCharaters = async () => {
     let baseUrl = 'https://rickandmortyapi.com/api/character?';
 
@@ -54,10 +66,11 @@ export function CharactersPage() {
       const response = await fetch(baseUrl);
       const data = await response.json();
 
-      const {info, results} = data;
+      const {results} = data;
 
       if (!results) {
         setIsDataOver(true);
+        setIsLoading(false);
         return;
       }
 
@@ -77,24 +90,76 @@ export function CharactersPage() {
     }
   };
 
+  const resetPages = () => {
+    setCurrentPage(1);
+  };
+
+  const fetchCharactersOnSubmit = () => {
+    setCharacters([]);
+    setIsDataOver(false);
+    fetchCharaters();
+  };
+
+  const fetchNextPage = () => {
+    fetchCharaters();
+  };
+
   useEffect(() => {
     fetchCharaters();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    resetPages();
+  }, [filter]);
+
+  return {
+    isLoading,
+    isDataOver,
+    characters,
+
+    // methods
+    fetchNextPage,
+    fetchCharactersOnSubmit,
+  };
+};
+
+export function CharactersPage() {
+  const [filter, setFilter] = useState({
+    gender: 'all',
+    species: 'all',
+    status: 'all',
+  });
+
+  const {
+    isLoading,
+    isDataOver,
+    characters,
+
+    fetchNextPage,
+    fetchCharactersOnSubmit,
+  } = useCharacters(filter);
+
+  const [isCharacterModalOpened, setIsCharacterModalOpened] = useState(false);
+  const [character, setCharacter] = useState([]);
+
   const handleFilterChange = (key, value) => {
-    setCurrentPage(1);
     setFilter({
       ...filter,
       [key]: value,
     });
   };
 
-  const handleFilterSubmit = () => {
-    setCharacters([]);
-    setIsDataOver(false);
+  const handleEndReached = () => {
+    if (isDataOver) {
+      return;
+    }
 
-    fetchCharaters();
+    fetchNextPage();
+  };
+
+  const handleFilterSubmit = () => {
+    fetchCharactersOnSubmit();
   };
 
   const handleCharacterCardClick = async id => {
@@ -119,19 +184,19 @@ export function CharactersPage() {
   };
 
   const renderFooter = () => {
+    if (isDataOver) {
+      return (
+        <View style={styles.preloaderWrapper}>
+          <Text>There is no data left</Text>
+        </View>
+      );
+    }
+
     return isLoading ? (
       <View style={styles.preloaderWrapper}>
         <ActivityIndicator large style={styles.preloader} color="#ffffff" />
       </View>
     ) : null;
-  };
-
-  const handleEndReached = () => {
-    if (isDataOver) {
-      return;
-    }
-
-    fetchCharaters();
   };
 
   const getItemCount = () => characters.length;
@@ -140,6 +205,7 @@ export function CharactersPage() {
     <View style={styles.container}>
       <Filter
         filter={filter}
+        filterOptions={FILTER_OPTIONS}
         onFilterChange={handleFilterChange}
         onFilterAction={handleFilterSubmit}
       />
@@ -184,7 +250,6 @@ export function CharactersPage() {
           Alert.alert('Modal has been closed.');
           handleClose();
         }}>
-        {/* {character ? ( */}
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View>

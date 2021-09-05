@@ -8,11 +8,9 @@ const Layout = () => {
   const [isDropdownActive, setIsDropdownActive] = useState(false);
 
   const menuToggle = () => {
-    console.log('menuToggle', 'menuToggle');
     setIsDropdownActive(dropdown => !dropdown);
   };
 
-  console.log(isDropdownActive);
   return (
     <View style={styles.container}>
       <Header
