@@ -1,0 +1,7 @@
+.startPage {
+  height: calc(100vh - var(--header-height));
+  background-image: url('./rick_and_morty.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-y: 85%;
+}

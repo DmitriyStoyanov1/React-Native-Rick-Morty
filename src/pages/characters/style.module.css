@@ -1,0 +1,15 @@
+.modalList {
+  list-style: none;
+  display: 'flex';
+  flex-direction: 'column';
+  padding-left: 0;
+  font-size: 18px;
+}
+
+.modalList li + li {
+  margin-top: 12px;
+}
+
+.modalListKey {
+  font-weight: 700;
+}
