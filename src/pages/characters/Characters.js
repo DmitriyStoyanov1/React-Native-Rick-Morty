@@ -116,6 +116,7 @@ const useCharacters = filter => {
   return {
     isLoading,
     isDataOver,
+
     characters,
 
     // methods
@@ -134,6 +135,7 @@ export function CharactersPage() {
   const {
     isLoading,
     isDataOver,
+
     characters,
 
     fetchNextPage,
@@ -186,7 +188,7 @@ export function CharactersPage() {
   const renderFooter = () => {
     if (isDataOver) {
       return (
-        <View style={styles.preloaderWrapper}>
+        <View>
           <Text>There is no data left</Text>
         </View>
       );
@@ -210,37 +212,35 @@ export function CharactersPage() {
         onFilterAction={handleFilterSubmit}
       />
 
-      {characters.length ? (
-        <SafeAreaView style={styles.container}>
-          <VirtualizedList
-            data={characters}
-            initialNumToRender={characters.length}
-            onEndReached={handleEndReached}
-            renderItem={({item}) => {
-              return (
-                <View style={styles.card}>
-                  <Image
-                    source={{uri: item.image}}
-                    style={styles.media}
-                    resizeMode="stretch"
-                  />
-                  <Text style={styles.title}>{item.name}</Text>
-                  <Text style={styles.pdLeft}>Some additional description</Text>
-                  <Pressable
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={() => handleCharacterCardClick(item.id)}>
-                    <Text style={styles.textStyle}>OPEN</Text>
-                  </Pressable>
-                </View>
-              );
-            }}
-            ListFooterComponent={renderFooter}
-            keyExtractor={item => item.url}
-            getItemCount={getItemCount}
-            getItem={getItem}
-          />
-        </SafeAreaView>
-      ) : null}
+      <SafeAreaView style={styles.container}>
+        <VirtualizedList
+          data={characters}
+          initialNumToRender={characters.length}
+          onEndReached={handleEndReached}
+          renderItem={({item}) => {
+            return (
+              <View style={styles.card}>
+                <Image
+                  source={{uri: item.image}}
+                  style={styles.media}
+                  resizeMode="stretch"
+                />
+                <Text style={styles.title}>{item.name}</Text>
+                <Text style={styles.pdLeft}>Some additional description</Text>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => handleCharacterCardClick(item.id)}>
+                  <Text style={styles.textStyle}>OPEN</Text>
+                </Pressable>
+              </View>
+            );
+          }}
+          ListFooterComponent={renderFooter}
+          keyExtractor={item => item.url}
+          getItemCount={getItemCount}
+          getItem={getItem}
+        />
+      </SafeAreaView>
 
       <Modal
         animationType="slide"
@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2196F3',
   },
   textStyle: {
-    letterSpacing: 5,
+    letterSpacing: 2,
     color: 'white',
     fontWeight: 'bold',
   },
