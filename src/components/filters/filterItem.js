@@ -16,7 +16,12 @@ export function FilterItem({label, options = [], value, onChange}) {
 
       <Picker selectedValue={value} onValueChange={handleFilterChange}>
         {options.map(({label: optionLabel, value}, index) => (
-          <Picker.Item key={index} label={optionLabel} value={value} />
+          <Picker.Item
+            style={styles.fontSize}
+            key={index}
+            label={optionLabel}
+            value={value}
+          />
         ))}
       </Picker>
     </View>
@@ -25,11 +30,16 @@ export function FilterItem({label, options = [], value, onChange}) {
 
 const styles = StyleSheet.create({
   dropDown: {
+    backgroundColor: '#fff',
     flexGrow: 1,
     borderWidth: 1,
+    borderRadius: 5,
   },
   category: {
     fontSize: 20,
     paddingLeft: 15,
+  },
+  fontSize: {
+    fontSize: 15,
   },
 });

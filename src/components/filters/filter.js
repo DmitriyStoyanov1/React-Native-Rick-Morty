@@ -24,13 +24,15 @@ export function Filter({
 
   return (
     <View style={styles.filters}>
-      {filters}
+      <View style={styles.categories}>{filters}</View>
 
-      <Pressable
-        style={[styles.button, styles.buttonClose]}
-        onPress={onFilterAction}>
-        <Text style={styles.textStyle}>FILTER</Text>
-      </Pressable>
+      <View>
+        <Pressable
+          style={[styles.button, styles.buttonClose]}
+          onPress={onFilterAction}>
+          <Text style={styles.textStyle}>FILTER</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -38,8 +40,28 @@ export function Filter({
 const styles = StyleSheet.create({
   filters: {
     display: 'flex',
-    flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+  },
+  categories: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  button: {
+    width: 200,
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+    elevation: 2,
+  },
+  buttonClose: {
+    marginTop: 10,
+    alignSelf: 'center',
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    textAlign: 'center',
+    letterSpacing: 2,
+    color: 'white',
+    fontWeight: 'bold',
   },
 });

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -25,7 +25,7 @@ const FILTER_OPTIONS = {
   species: [
     {label: 'All', value: 'all'},
     {label: 'Human', value: 'human'},
-    {label: 'Alien', value: 'alien'}
+    {label: 'Alien', value: 'alien'},
   ],
   status: [
     {label: 'All', value: 'all'},
@@ -187,11 +187,7 @@ export function CharactersPage() {
 
   const renderFooter = () => {
     if (isDataOver) {
-      return (
-        <View>
-          <Text>There is no data left</Text>
-        </View>
-      );
+      return null;
     }
 
     return isLoading ? (
@@ -352,7 +348,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
     backgroundColor: 'rgba(52, 52, 52, 0.8)',
   },
   media: {

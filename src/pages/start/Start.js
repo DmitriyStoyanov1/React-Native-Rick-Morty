@@ -10,6 +10,7 @@ export const StartPage = ({navigation}) => {
   const [dropdown, setDropdown] = useState(false);
 
   const loadScene = page => {
+    setDropdown(false);
     navigation.navigate(page);
   };
 
@@ -34,12 +35,16 @@ export const StartPage = ({navigation}) => {
             source={require('../../assets/logo.png')}
             style={{
               width: 200,
-              height: 100,
+              height: 80,
               resizeMode: 'contain',
             }}
           />
         }
-        rightComponent={{icon: 'home', color: '#fff'}}
+        rightComponent={{
+          icon: 'home',
+          color: '#fff',
+          onPress: () => setDropdown(false),
+        }}
       />
       <ImageBackground
         style={styles.imgBackground}

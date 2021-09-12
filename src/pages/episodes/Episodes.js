@@ -13,7 +13,7 @@ const FILTER_OPTIONS = {
   date: [
     {label: 'From older to newer', value: 'older'},
     {label: 'From newer to older', value: 'newer'},
-  ]
+  ],
 };
 
 const useEpisodes = filter => {
@@ -81,9 +81,7 @@ const useEpisodes = filter => {
   return {
     isLoading,
     isDataOver,
-
     episodes,
-
     // methods
     fetchNextPage,
     applyFilter,
@@ -97,15 +95,8 @@ export function EpisodesPage() {
     date: 'older',
   });
 
-  const {
-    isLoading,
-    isDataOver,
-
-    episodes,
-
-    fetchNextPage,
-    applyFilter,
-  } = useEpisodes(filter);
+  const {isLoading, isDataOver, episodes, fetchNextPage, applyFilter} =
+    useEpisodes(filter);
 
   const handleEndReached = () => {
     if (isDataOver) {
@@ -117,7 +108,7 @@ export function EpisodesPage() {
 
   const renderItem = ({item}) => (
     <View style={styles.card}>
-      <Text style={styles.title}>{item.id}</Text>
+      <Text style={[styles.title, styles.id]}>{item.id}</Text>
       <Text style={styles.title}>{item.name}</Text>
       <Text style={styles.title}>{item.air_date}</Text>
       <Text style={styles.title}>{item.episode}</Text>
@@ -126,11 +117,7 @@ export function EpisodesPage() {
 
   const renderFooter = () => {
     if (isDataOver) {
-      return (
-        <View>
-          <Text>There is no data left</Text>
-        </View>
-      );
+      return null;
     }
 
     return isLoading ? (
@@ -174,6 +161,12 @@ export function EpisodesPage() {
         onFilterAction={handleFilterSubmit}
       />
 
+      <View style={styles.titles}>
+        <Text style={styles.label}>ID</Text>
+        <Text style={styles.label}>Name</Text>
+        <Text style={styles.label}>Type</Text>
+        <Text style={styles.label}>Dimension</Text>
+      </View>
       <SafeAreaView style={styles.container}>
         <VirtualizedList
           ref={listRef}
@@ -194,23 +187,41 @@ export function EpisodesPage() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#bdaecc',
-    paddingLeft: 20,
-    paddingRight: 20,
     flex: 1,
   },
   card: {
     display: 'flex',
-    backgroundColor: '#fff',
-    height: 280,
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 15,
-    marginHorizontal: 30,
+    backgroundColor: '#fff',
     borderRadius: 5,
     overflow: 'hidden',
+    paddingTop: 10,
     paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'grey',
   },
   title: {
-    fontSize: 25,
+    fontSize: 12,
+    width: '25%',
     paddingLeft: 20,
+  },
+  id: {
+    width: '10%',
+  },
+  titles: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: 'grey',
+  },
+  label: {
+    fontSize: 20,
   },
 });
